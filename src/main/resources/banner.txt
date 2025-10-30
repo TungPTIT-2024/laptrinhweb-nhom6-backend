@@ -1,0 +1,11 @@
+        ______________________________
+        ___  __ \__  __/___  _/__  __/
+        __  /_/ /_  /   __  / __  /
+        _  ____/_  /   __/ /  _  /
+        /_/     /_/    /___/  /_/
+
+=====================================
+
+        Application: ${spring.application.name}
+        Version:     ${spring.application.version}
+        Profile:     ${spring.profiles.active}

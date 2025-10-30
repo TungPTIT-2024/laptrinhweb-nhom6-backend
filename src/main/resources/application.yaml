@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: Backend-Nhom6
+    version: 0.0.1
+  profiles:
+    active: dev
+
+jwt:
+  secret: your_jwt_secret_key
+  expiration: 86400000
