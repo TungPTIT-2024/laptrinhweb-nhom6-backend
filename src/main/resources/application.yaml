@@ -35,5 +35,5 @@ internal:
   secret: DlSf0vN1kZFz52iozIdi
 
 jwt:
-  secret: your_jwt_secret_key
+  secret: L9Q7tMNhwcKCB4mRYybxWiG8X/ig97x3n/YAcPI3Pt1mTtpnktT+2giK6T2gBt8pY9ddU5ShYgwIdRQQbVQOjA==
   expiration: 86400000

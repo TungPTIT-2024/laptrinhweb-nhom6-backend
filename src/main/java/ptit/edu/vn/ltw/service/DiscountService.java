@@ -35,6 +35,7 @@ public class DiscountService {
     public GenericResponse applyDiscountToProduct(String productId, @Valid DiscountRequest request) {
         this.checkProductExistById(productId);
         Discount discount = new Discount();
+        discount.setProductId(productId);
         BeanUtils.copyProperties(request, discount);
 
         discountRepository.save(discount);
@@ -49,10 +50,6 @@ public class DiscountService {
                     return HttpStatusException.badRequest(RESOURCES_NOT_FOUND, List.of(errorDetail));
                 });
 
-        if (request.getProductId() != null) {
-            this.checkProductExistById(request.getProductId());
-            existingDiscount.setProductId(request.getProductId());
-        }
         if (request.getDescription() != null) {
             existingDiscount.setDescription(request.getDescription());
         }

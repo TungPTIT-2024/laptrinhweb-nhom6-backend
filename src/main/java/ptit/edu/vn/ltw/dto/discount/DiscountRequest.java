@@ -18,10 +18,6 @@ import java.time.Instant;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Accessors(chain=true)
 public class DiscountRequest {
-    @NotBlank(message = "productId is required")
-    @Size(max = 36, message = "productId must be at most 36 characters")
-    private String productId;
-
     @Size(max = 255, message = "description must be at most 255 characters")
     private String description;
 

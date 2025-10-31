@@ -12,7 +12,6 @@ import lombok.experimental.Accessors;
 public class UserInfoResponse {
     private String id;
     private String username;
-    private String password;
     private String fullName;
     private String profileImage;
 }

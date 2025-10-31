@@ -21,7 +21,7 @@ import ptit.edu.vn.ltw.service.CommentService;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/api/v1/products/{id}/comments")
+    @GetMapping("/api/v1/product/{id}/comments")
     public ResponseEntity<CommentListResponse> getProductComments(@PathVariable(value = "id") String productId,
                                                                   @RequestParam(defaultValue = "0") Integer page,
                                                                   @RequestParam(defaultValue = "5") Integer size) {
@@ -31,21 +31,21 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/v1/products/{id}/comment")
+    @PostMapping("/api/v1/product/{id}/comment")
     public ResponseEntity<GenericResponse> postProductComment(@PathVariable(value = "id") String productId,
                                                               @Valid @RequestBody CommentRequest request) {
         GenericResponse response = commentService.createCommentForProduct(productId, request);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/api/v1/comments/{id} ")
+    @PatchMapping("/api/v1/comment/{id} ")
     public ResponseEntity<GenericResponse> editComment(@PathVariable(value = "id") String commentId,
                                                        @Valid @RequestBody CommentRequest request) {
         GenericResponse response = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/api/v1/comments/{id} ")
+    @DeleteMapping("/api/v1/comment/{id} ")
     public ResponseEntity<GenericResponse> deleteComment(@PathVariable(value = "id") String commentId) {
         GenericResponse response = commentService.deleteComment(commentId);
 

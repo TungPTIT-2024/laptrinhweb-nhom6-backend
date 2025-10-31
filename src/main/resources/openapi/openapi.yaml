@@ -247,7 +247,8 @@ paths:
                 $ref: '#/components/schemas/GenericResponse'
         '404':
           description: Product not found
-  /internal/product/{productId}/discount:
+
+  /internal/api/product/{productId}/discount:
     post:
       tags:
         - DiscountController
@@ -282,7 +283,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /internal/discount/{id}:
+  /internal/api/product/{id}:
     patch:
       tags:
         - Discount Controller
@@ -347,7 +348,7 @@ paths:
         '401':
           description: Unauthorized
 
-  /api/v1/products/{productId}/comments:
+  /api/v1/product/{productId}/comments:
     get:
       summary: List comments
       tags:
@@ -382,6 +383,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentListResponse'
+
+  /api/v1/product/{productId}/comment:
     post:
       summary: Create comment
       tags:
@@ -401,73 +404,61 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CommentCreateRequest'
+              $ref: '#/components/schemas/CommentRequest'
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentResponse'
-  /api/v1/products/{productId}/comments/{commentId}:
-    put:
+                $ref: '#/components/schemas/GenericResponse'
+  /api/v1/comments/{commentId}:
+    patch:
       tags:
         - Comment Controller
 
       summary: Update comment
       description: Update an existing comment
       parameters:
-        - name: productId
-          in: path
-          description: Product id
-          required: true
-          schema:
-            type: integer
-            format: int64
         - name: commentId
           in: path
           description: Comment id
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       requestBody:
         description: Comment payload
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CommentCreateRequest'
+              $ref: '#/components/schemas/CommentRequest'
       responses:
         '200':
           description: Updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CommentResponse'
+                $ref: '#/components/schemas/GenericResponse'
         '404':
           description: Comment not found
     delete:
       summary: Delete comment
       description: Delete a comment by id
       parameters:
-        - name: productId
-          in: path
-          description: Product id
-          required: true
-          schema:
-            type: integer
-            format: int64
         - name: commentId
           in: path
           description: Comment id
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
-        '204':
-          description: Deleted (no content)
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
         '404':
           description: Comment not found
 components:
@@ -486,11 +477,9 @@ components:
     LoginResponse:
       type: object
       properties:
-        token:
+        jwtToken:
           type: string
         userId:
-          type: string
-        username:
           type: string
 
     RegisterRequest:
@@ -511,11 +500,11 @@ components:
     RegisterResponse:
       type: object
       properties:
-        id:
+        userId:
           type: string
         username:
           type: string
-        message:
+        jwtToken:
           type: string
 
     UserInfoResponse:
@@ -528,8 +517,6 @@ components:
         fullName:
           type: string
         profileImage:
-          type: string
-        email:
           type: string
 
     UpdateProfileImageRequest:
@@ -627,7 +614,7 @@ components:
           format: date-time
           nullable: true
 
-    CommentCreateRequest:
+    CommentRequest:
       type: object
       properties:
         content:

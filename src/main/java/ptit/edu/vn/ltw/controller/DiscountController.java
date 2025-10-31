@@ -18,19 +18,19 @@ import ptit.edu.vn.ltw.service.DiscountService;
 public class DiscountController {
     private final DiscountService discountService;
 
-    @PostMapping("/internal/product/{productId}/discount")
+    @PostMapping("/internal/api/product/{productId}/discount")
     public ResponseEntity<GenericResponse> applyDiscount(@PathVariable String productId, @Valid @RequestBody DiscountRequest request) {
         GenericResponse response = discountService.applyDiscountToProduct(productId, request);
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/internal/discount/{id}")
+    @PatchMapping("/internal/api/discount/{id}")
     public ResponseEntity<GenericResponse> patchDiscount(@PathVariable String id, @Valid @RequestBody DiscountRequest request) {
         GenericResponse response = discountService.updateDiscount(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/internal/discount/{id}")
+    @DeleteMapping("/internal/api//discount/{id}")
     public ResponseEntity<GenericResponse> removeDiscount(@PathVariable String id) {
         GenericResponse response = discountService.removeDiscount(id);
         return ResponseEntity.ok(response);

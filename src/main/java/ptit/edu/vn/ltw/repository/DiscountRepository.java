@@ -24,7 +24,7 @@ public interface DiscountRepository extends JpaRepository<Discount, String> {
     @Query("""
         SELECT d
         FROM Discount d
-        WHERE d.productId = :productIds
+        WHERE d.productId = :productId
           AND d.startDate <= :now
           AND (d.endDate IS NULL OR d.endDate >= :now)
     """)

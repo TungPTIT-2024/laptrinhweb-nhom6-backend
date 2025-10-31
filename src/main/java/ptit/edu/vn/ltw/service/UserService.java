@@ -21,6 +21,7 @@ import ptit.edu.vn.ltw.security.encryption.UserEncryptionService;
 import ptit.edu.vn.ltw.utility.ContextUtility;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,12 +45,19 @@ public class UserService {
 
         String jwtToken = jwtService.encryptToken(userInfo);
 
-        return new LoginResponse().setJwtToken(jwtToken);
+        return new LoginResponse().setJwtToken(jwtToken).setUserId(userInfo.getId());
     }
 
     @Transactional
     public RegisterResponse register(RegisterRequest request) {
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+
+        Optional<UserInfo> checkExistingUser = userInfoRepository.findByUsername(request.getUsername());
+        if (checkExistingUser.isPresent()) {
+            ErrorDetail errorDetail = new ErrorDetail().setField("username").setIssue("Username already exists");
+            throw HttpStatusException.badRequest("Username already exists", List.of(errorDetail));
+        }
+
         UserInfo userInfo = new UserInfo()
                 .setFullName(request.getFullName())
                 .setUsername(request.getUsername())
@@ -60,7 +68,7 @@ public class UserService {
 
         String jwtToken = jwtService.encryptToken(userInfo);
 
-        return new RegisterResponse().setJwtToken(jwtToken);
+        return new RegisterResponse().setJwtToken(jwtToken).setUsername(userInfo.getUsername()).setUserId(userInfo.getId());
     }
 
     public UserInfoResponse getUserInfo(String userId) {

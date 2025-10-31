@@ -11,5 +11,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 public class RegisterResponse {
     private String username;
+    private String userId;
     private String jwtToken;
 }
