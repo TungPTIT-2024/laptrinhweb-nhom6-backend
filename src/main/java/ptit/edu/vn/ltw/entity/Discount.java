@@ -34,7 +34,6 @@ public class Discount {
     @Column(name = ID_COL, nullable = false, updatable = false, length = 36)
     private String id;
 
-    // plain FK as String
     @Column(name = PRODUCT_ID_COL, length = 36)
     private String productId;
 

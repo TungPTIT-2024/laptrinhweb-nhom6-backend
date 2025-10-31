@@ -24,6 +24,7 @@ public class UserInfo extends Auditable{
     public static final String USERNAME_COL = "username";
     public static final String PASSWORD_COL = "password";
     public static final String FULL_NAME_COL = "full_name";
+    public static final String PROFILE_IMAGE_COL = "profile_image";
 
     @Id
     @UuidGenerator
@@ -38,4 +39,7 @@ public class UserInfo extends Auditable{
 
     @Column(name = FULL_NAME_COL, length = 255)
     private String fullName;
+
+    @Column(name = PROFILE_IMAGE_COL, length = 500)
+    private String profileImage;
 }

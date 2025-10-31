@@ -17,8 +17,8 @@ import java.time.Instant;
 @Setter
 public abstract class Auditable {
 
-    public static final String CREATED_AT_COL = "createdAt";
-    public static final String MODIFIED_AT_COL = "modifiedAt";
+    public static final String CREATED_AT_COL = "created_at";
+    public static final String MODIFIED_AT_COL = "modified_at";
 
     @CreatedDate
     @Column(name = CREATED_AT_COL, nullable = false, updatable = false)

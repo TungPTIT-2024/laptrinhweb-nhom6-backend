@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignore H2 persisted database files created under resources/data
+/src/main/resources/data/

@@ -25,7 +25,7 @@ public class UserInfoService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> grantedAuthorityList = List.of(new SimpleGrantedAuthority("USER"));
 
-        return new UserInfoDetail().setUsername(userInfo.getUsername())
+        return new UserInfoDetail().setId(userInfo.getId()).setUsername(userInfo.getUsername())
                 .setAuthorities(grantedAuthorityList)
                 .setPassword(userInfo.getPassword());
     }

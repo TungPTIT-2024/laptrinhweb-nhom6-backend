@@ -17,7 +17,9 @@ public class PublicApiMatcher implements RequestMatcher {
     private static final List<String> PUBLIC_API_PATHS = List.of(
             "/api/v1/login/**",
             "/api/v1/products/**",
-            "/api/v1/register/**"
+            "/api/v1/register/**",
+            "/h2-console/**",
+            "/health", "/favicon.ico"
     );
 
     private List<PathPattern> publicPatterns;
