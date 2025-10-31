@@ -28,7 +28,6 @@ public class UserFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         if (Strings.isEmpty(request.getHeader(AUTHORIZATION_HEADER))){
             throw new AuthenticationCredentialsNotFoundException("No authentication header");
         }
@@ -40,8 +39,11 @@ public class UserFilter extends OncePerRequestFilter {
 
         String credential = token.substring(BEARER_PREFIX.length());
         Authentication authentication = userManager.authenticate(new UserToken(credential));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
-
+        try {
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
     }
 }

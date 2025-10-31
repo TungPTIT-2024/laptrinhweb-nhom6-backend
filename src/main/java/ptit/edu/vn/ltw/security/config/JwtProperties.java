@@ -1,4 +1,4 @@
-package ptit.edu.vn.ltw.config;
+package ptit.edu.vn.ltw.security.config;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Data
 @ConfigurationProperties(prefix = "jwt")
 @NoArgsConstructor
-public class AppProperties {
+public class JwtProperties {
     private String secret;
     private int expiration;
 }

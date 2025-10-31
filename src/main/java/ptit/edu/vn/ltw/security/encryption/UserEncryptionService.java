@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
-import ptit.edu.vn.ltw.config.AppProperties;
 import ptit.edu.vn.ltw.entity.UserInfo;
 import ptit.edu.vn.ltw.exception.HttpStatusException;
+import ptit.edu.vn.ltw.security.config.JwtProperties;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -28,14 +28,14 @@ import java.util.Date;
 @RequiredArgsConstructor
 @SuppressWarnings({"java:S1874", "java:S1166"})
 public class UserEncryptionService {
-    private final AppProperties appProperties;
+    private final JwtProperties jwtProperties;
     private final ObjectMapper objectMapper;
 
     private SecretKey jwtKey;
 
     @PostConstruct
     public void init() {
-        jwtKey = new SecretKeySpec(appProperties.getSecret().getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
+        jwtKey = new SecretKeySpec(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
     }
 
     public UserJWTToken decryptToken(String credentials) throws AuthenticationException {
@@ -64,7 +64,7 @@ public class UserEncryptionService {
 
     public String encryptToken(UserInfo userInfo){
         UserJWTToken token = new UserJWTToken().setUserId(userInfo.getId()).setUserName(userInfo.getFullName());
-        Instant expireTime = Instant.now().plus(appProperties.getExpiration(), ChronoUnit.SECONDS);
+        Instant expireTime = Instant.now().plus(jwtProperties.getExpiration(), ChronoUnit.SECONDS);
         try {
             return Jwts.builder()
                     .subject(objectMapper.writeValueAsString(token))
