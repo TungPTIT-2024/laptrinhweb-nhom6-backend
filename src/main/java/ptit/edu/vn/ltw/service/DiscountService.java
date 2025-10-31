@@ -11,6 +11,7 @@ import ptit.edu.vn.ltw.entity.Discount;
 import ptit.edu.vn.ltw.exception.ErrorDetail;
 import ptit.edu.vn.ltw.exception.HttpStatusException;
 import ptit.edu.vn.ltw.repository.DiscountRepository;
+import ptit.edu.vn.ltw.repository.ProductRepository;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -25,10 +26,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DiscountService {
     private final DiscountRepository discountRepository;
-    private final ProductService productService;
+    private final ProductRepository productRepository;
+
+    private static final String RESOURCES_NOT_FOUND = "Resources not found";
+    private static final String ERROR_PRODUCT_NOT_FOUND_TEMPLATE = "Product with id %s not found";
+
 
     public GenericResponse applyDiscountToProduct(String productId, @Valid DiscountRequest request) {
-        productService.checkProductExistById(productId);
+        this.checkProductExistById(productId);
         Discount discount = new Discount();
         BeanUtils.copyProperties(request, discount);
 
@@ -41,11 +46,11 @@ public class DiscountService {
         Discount existingDiscount = discountRepository.findById(id)
                 .orElseThrow(() -> {
                     ErrorDetail errorDetail = new ErrorDetail().setField("discount_id").setIssue(String.format("Discount with id %s not found", id));
-                    return HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
+                    return HttpStatusException.badRequest(RESOURCES_NOT_FOUND, List.of(errorDetail));
                 });
 
         if (request.getProductId() != null) {
-            productService.checkProductExistById(request.getProductId());
+            this.checkProductExistById(request.getProductId());
             existingDiscount.setProductId(request.getProductId());
         }
         if (request.getDescription() != null) {
@@ -69,7 +74,7 @@ public class DiscountService {
         Discount existingDiscount = discountRepository.findById(id)
                 .orElseThrow(() -> {
                     ErrorDetail errorDetail = new ErrorDetail().setField("discount_id").setIssue(String.format("Discount with id %s not found", id));
-                    return HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
+                    return HttpStatusException.badRequest(RESOURCES_NOT_FOUND, List.of(errorDetail));
                 });
 
         discountRepository.delete(existingDiscount);
@@ -103,5 +108,13 @@ public class DiscountService {
                                 optional -> optional.orElse(null)
                         )
                 ));
+    }
+
+    private void checkProductExistById(String id) {
+        if (!productRepository.existsById(id)){
+            ErrorDetail errorDetail = new ErrorDetail().setField("product_id").setIssue(String.format(ERROR_PRODUCT_NOT_FOUND_TEMPLATE, id));
+            throw HttpStatusException.badRequest(RESOURCES_NOT_FOUND, List.of(errorDetail));
+
+        }
     }
 }

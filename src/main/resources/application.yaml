@@ -24,6 +24,12 @@ spring:
   sql:
     init:
       mode: always
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    url: /openapi/openapi.yaml
+    disable-swagger-default-url: true
 
 internal:
   secret: DlSf0vN1kZFz52iozIdi

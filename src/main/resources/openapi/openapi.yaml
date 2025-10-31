@@ -1,0 +1,672 @@
+openapi: 3.0.3
+info:
+  title: My Service API
+  version: 1.0.0
+  description: API documentation for the backend service.
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/login:
+    post:
+      tags:
+        - User Controller
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /api/v1/register:
+    post:
+      tags:
+        - User Controller
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: Validation error
+
+  /api/v1/user/{id}:
+    get:
+      tags:
+        - User Controller
+      summary: Get user info by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: User information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+        '404':
+          description: User not found
+
+  /api/v1/user/profile-image:
+    patch:
+      tags:
+        - User Controller
+      summary: Update profile image
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileImageRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+
+  /api/v1/products:
+    get:
+      tags:
+        - ProductController
+      summary: Get paginated products
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 5
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paginated list of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+
+  /api/v1/product/{id}:
+    get:
+      tags:
+        - ProductController
+      summary: Get product by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: Product detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetailResponse'
+        '404':
+          description: Product not found
+
+  /internal/api/v1/product:
+    post:
+      tags:
+        - ProductController
+      summary: Create a new product
+      parameters:
+        - name: INTERNAL_API_KEY
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Created product detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetailResponse'
+        '400':
+          description: Validation error
+
+  /internal/api/v1/product/{id}:
+    patch:
+      tags:
+        - ProductController
+      summary: Update (patch) an existing product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: INTERNAL_API_KEY
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: Updated product detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetailResponse'
+        '400':
+          description: Validation error
+        '404':
+          description: Product not found
+
+    delete:
+      tags:
+        - ProductController
+      summary: Delete product by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deletion result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '404':
+          description: Product not found
+  /internal/product/{productId}/discount:
+    post:
+      tags:
+        - DiscountController
+      summary: Apply discount to a product
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: INTERNAL_API_KEY
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscountRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+
+  /internal/discount/{id}:
+    patch:
+      tags:
+        - Discount Controller
+      summary: Update an existing discount
+      parameters:
+        - name: INTERNAL_API_KEY
+          in: header
+          required: true
+          schema:
+            type: string
+
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscountRequest'
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '400':
+          description: Validation error
+        '404':
+          description: Discount not found
+        '401':
+          description: Unauthorized
+
+    delete:
+      tags:
+        - DiscountController
+      summary: Remove a discount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+
+        - name: INTERNAL_API_KEY
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Operation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericResponse'
+        '404':
+          description: Discount not found
+        '401':
+          description: Unauthorized
+
+  /api/v1/products/{productId}/comments:
+    get:
+      summary: List comments
+      tags:
+        - Comment Controller
+      description: Returns paginated list of comments for a product
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Page number (0-based)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Page size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentListResponse'
+    post:
+      summary: Create comment
+      tags:
+        - Comment Controller
+      description: Create a new comment for a product
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Comment payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+  /api/v1/products/{productId}/comments/{commentId}:
+    put:
+      tags:
+        - Comment Controller
+
+      summary: Update comment
+      description: Update an existing comment
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: commentId
+          in: path
+          description: Comment id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Comment payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentCreateRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Comment not found
+    delete:
+      summary: Delete comment
+      description: Delete a comment by id
+      parameters:
+        - name: productId
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: commentId
+          in: path
+          description: Comment id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted (no content)
+        '404':
+          description: Comment not found
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+
+    RegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        fullName:
+          type: string
+        profileImage:
+          type: string
+      required:
+        - username
+        - password
+
+    RegisterResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        message:
+          type: string
+
+    UserInfoResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        fullName:
+          type: string
+        profileImage:
+          type: string
+        email:
+          type: string
+
+    UpdateProfileImageRequest:
+      type: object
+      properties:
+        profileImage:
+          type: string
+      required:
+        - profileImage
+
+    GenericResponse:
+      type: object
+      properties:
+        httpStatus:
+          type: integer
+        message:
+          type: string
+
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        image:
+          type: string
+        description:
+          type: string
+        sku:
+          type: string
+
+    ProductDetailResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        image:
+          type: string
+        description:
+          type: string
+        sku:
+          type: string
+        discountPercentage:
+          type: number
+          format: double
+          nullable: true
+        discountDescription:
+          type: string
+          nullable: true
+
+    ProductListResponse:
+      type: object
+      properties:
+        productList:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDetailResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalPage:
+          type: integer
+
+    DiscountRequest:
+      type: object
+      description: Discount request
+      properties:
+        productId:
+          type: string
+          description: Product ID (required)
+        description:
+          type: string
+          maxLength: 255
+          nullable: true
+        percentage:
+          type: number
+          format: double
+          minimum: 0.00
+          maximum: 100.00
+          description: Discount percentage (required)
+        startDate:
+          type: string
+          format: date-time
+          nullable: true
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+
+    CommentCreateRequest:
+      type: object
+      properties:
+        content:
+          type: string
+      required:
+        - content
+
+    CommentListResponse:
+      type: object
+      properties:
+        commentList:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentResponse'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalPage:
+          type: integer
+      required:
+        - commentList
+        - page
+        - size
+        - totalPage
+
+    CommentResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+        userName:
+          type: string
+        profileImage:
+          type: string
+          nullable: true
+        content:
+          type: string
+      required:
+        - userId
+        - userName
+        - content

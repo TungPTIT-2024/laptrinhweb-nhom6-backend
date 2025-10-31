@@ -19,7 +19,8 @@ public class PublicApiMatcher implements RequestMatcher {
             "/api/v1/products/**",
             "/api/v1/register/**",
             "/h2-console/**",
-            "/health", "/favicon.ico"
+            "/health", "/favicon.ico", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html",
+            "/webjars/**", "/swagger-resources/**", "/swagger-resources"
     );
 
     private List<PathPattern> publicPatterns;
@@ -35,6 +36,14 @@ public class PublicApiMatcher implements RequestMatcher {
     @Override
     public boolean matches(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        if (contextPath != null && !contextPath.isEmpty() && requestPath.startsWith(contextPath)) {
+            requestPath = requestPath.substring(contextPath.length());
+            if (requestPath.isEmpty()) {
+                requestPath = "/";
+            }
+        }
+
         PathContainer pathContainer = PathContainer.parsePath(requestPath);
 
         for (PathPattern pattern : publicPatterns) {

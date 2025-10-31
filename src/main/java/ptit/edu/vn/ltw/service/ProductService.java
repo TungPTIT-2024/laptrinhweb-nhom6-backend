@@ -24,10 +24,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    public static final String RESOURCES_NOT_FOUND = "Resources not found";
-    public static final String ERROR_PRODUCT_NOT_FOUND_TEMPLATE = "Product with id %s not found";
     private final ProductRepository productRepository;
     private final DiscountService discountService;
+
+    private static final String RESOURCES_NOT_FOUND = "Resources not found";
+    private static final String ERROR_PRODUCT_NOT_FOUND_TEMPLATE = "Product with id %s not found";
 
     public ProductListResponse getProducts(Integer page, Integer size) {
         PageRequest pageable = PageRequest.of(page - 1, size);
