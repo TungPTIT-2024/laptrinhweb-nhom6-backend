@@ -26,7 +26,9 @@ spring:
     enabled: true
     url: /openapi/openapi.yaml
     disable-swagger-default-url: true
-
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
 internal:
   secret: DlSf0vN1kZFz52iozIdi
 

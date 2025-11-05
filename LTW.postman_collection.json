@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "5dcfc860-1457-48fe-83ad-3e51062449de",
+		"name": "LTW",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17489189"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							"\r",
+							"// Check if jwtToken exists\r",
+							"if (response.jwtToken) {\r",
+							"    // Set the token as a collection variable\r",
+							"    pm.collectionVariables.set(\"jwtToken\", response.jwtToken);\r",
+							"    console.log(\"✅ jwtToken saved to collection variables:\", response.jwtToken);\r",
+							"} else {\r",
+							"    console.warn(\"⚠️ No jwtToken found in response\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"bob_b\",\r\n    \"password\": \"test@1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/v1/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "INTERNAL_API_KEY",
+						"value": "{{INTERNAL_API_KEY}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sneaker Bitis\",\r\n    \"price\": 2000000.00,\r\n    \"image\": \"https://tse1.mm.bing.net/th/id/OIP.XwvOVPNb4hnZdDmk2zv8gwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3\",\r\n    \"description\": \"Bitis VietName\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/internal/api/v1/product",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"internal",
+						"api",
+						"v1",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwtToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/v1/products?page=1&size=5",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "jwtToken",
+			"value": ""
+		},
+		{
+			"key": "INTERNAL_API_KEY",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

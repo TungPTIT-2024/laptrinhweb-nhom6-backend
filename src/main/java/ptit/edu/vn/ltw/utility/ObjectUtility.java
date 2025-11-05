@@ -9,7 +9,7 @@ public class ObjectUtility {
     public <T> T getMethod(Supplier<T> supplier) {
         try {
             return supplier.get();
-        } catch (Exception _) {
+        } catch (Exception ex) {
             return null;
         }
     }
