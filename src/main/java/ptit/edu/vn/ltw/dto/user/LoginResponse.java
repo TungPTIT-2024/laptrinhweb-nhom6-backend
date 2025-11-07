@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 public class LoginResponse {
     private String jwtToken;
     private String userId;
+    private String username;
+    private String fullName;
+    private String profileImage;
+
 }

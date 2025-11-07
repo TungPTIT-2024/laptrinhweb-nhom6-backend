@@ -29,23 +29,30 @@ public class UserService {
     private final UserInfoRepository userInfoRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserEncryptionService jwtService;
+
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+
+
     public LoginResponse login(LoginRequest request) {
         UserInfo userInfo = userInfoRepository.findByUsername(request.getUsername()).orElseThrow(() -> {
-            ErrorDetail userDetail = new ErrorDetail().setField("username").setIssue("Username not found");
-            ErrorDetail passwordDetail = new ErrorDetail().setField("password").setIssue("Invalid password");
+            ErrorDetail userDetail = new ErrorDetail().setField(USERNAME).setIssue("Username not found");
+            ErrorDetail passwordDetail = new ErrorDetail().setField(PASSWORD).setIssue("Invalid password");
             return HttpStatusException.badRequest("Invalid username or password", List.of(userDetail, passwordDetail));
         });
 
         String encodedPassword = userInfo.getPassword();
         if (!bCryptPasswordEncoder.matches(request.getPassword(), encodedPassword)) {
-            ErrorDetail userDetail = new ErrorDetail().setField("username").setIssue("Username not found");
-            ErrorDetail passwordDetail = new ErrorDetail().setField("password").setIssue("Invalid password");
+            ErrorDetail userDetail = new ErrorDetail().setField(USERNAME).setIssue("Username not found");
+            ErrorDetail passwordDetail = new ErrorDetail().setField(PASSWORD).setIssue("Invalid password");
             throw HttpStatusException.badRequest("Invalid username or password", List.of(userDetail, passwordDetail));
         }
 
         String jwtToken = jwtService.encryptToken(userInfo);
+        LoginResponse response = new LoginResponse().setJwtToken(jwtToken).setUserId(userInfo.getId());
+        BeanUtils.copyProperties(userInfo, response);
 
-        return new LoginResponse().setJwtToken(jwtToken).setUserId(userInfo.getId());
+        return response;
     }
 
     @Transactional
@@ -54,7 +61,7 @@ public class UserService {
 
         Optional<UserInfo> checkExistingUser = userInfoRepository.findByUsername(request.getUsername());
         if (checkExistingUser.isPresent()) {
-            ErrorDetail errorDetail = new ErrorDetail().setField("username").setIssue("Username already exists");
+            ErrorDetail errorDetail = new ErrorDetail().setField(USERNAME).setIssue("Username already exists");
             throw HttpStatusException.badRequest("Username already exists", List.of(errorDetail));
         }
 

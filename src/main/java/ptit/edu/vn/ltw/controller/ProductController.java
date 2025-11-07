@@ -31,7 +31,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/v1/product/{id}")
+    @GetMapping("/api/v1/products/{id}")
     public ResponseEntity<ProductDetailResponse> getProductById(@PathVariable String id) {
         ProductDetailResponse response = productService.getProductById(id);
         return ResponseEntity.ok(response);
