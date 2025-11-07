@@ -43,13 +43,13 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/internal/api/v1/product/{id}")
+    @PatchMapping("/internal/api/v1/products/{id}")
     public ResponseEntity<ProductDetailResponse> patchProduct(@PathVariable String id, @Valid @RequestBody ProductRequest productRequest) {
         ProductDetailResponse response = productService.updateProduct(id, productRequest);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/internal/api/v1/product/{id}")
+    @DeleteMapping("/internal/api/v1/products/{id}")
     public ResponseEntity<GenericResponse> deleteProduct(@PathVariable String id) {
         GenericResponse response = productService.deleteProductById(id);
         return ResponseEntity.ok(response);
