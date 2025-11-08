@@ -39,14 +39,14 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/api/v1/comment")
+    @PatchMapping("/api/v1/product/comment")
     public ResponseEntity<CommentResponse> editComment(@RequestParam(value = "id") String commentId,
                                                        @Valid @RequestBody CommentRequest request) {
         CommentResponse response = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/api/v1/comment")
+    @DeleteMapping("/api/v1/product/comment")
     public ResponseEntity<GenericResponse> deleteComment(@RequestParam(value = "id") String commentId) {
         GenericResponse response = commentService.deleteComment(commentId);
         return ResponseEntity.ok(response);
