@@ -27,10 +27,11 @@ public class ProductController {
                                                            @RequestParam(defaultValue = "5") Integer size,
                                                            @RequestParam(required = false) String keyword,
                                                            @RequestParam(required = false) Integer minPrice,
-                                                           @RequestParam(required = false) Integer maxPrice) {
+                                                           @RequestParam(required = false) Integer maxPrice,
+                                                           @RequestParam(required = false, defaultValue = "asc") String sortPrice) {
         if (page < 1) page = 1;
         if (size < 1) size = 5;
-        ProductListResponse response = productService.getProducts(page, size, keyword, minPrice, maxPrice);
+        ProductListResponse response = productService.getProducts(page, size, keyword, minPrice, maxPrice, sortPrice);
         return ResponseEntity.ok(response);
     }
 

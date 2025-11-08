@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ptit.edu.vn.ltw.dto.common.GenericResponse;
 import ptit.edu.vn.ltw.dto.product.ProductDetailResponse;
@@ -31,8 +32,16 @@ public class ProductService {
     private static final String RESOURCES_NOT_FOUND = "Resources not found";
     private static final String ERROR_PRODUCT_NOT_FOUND_TEMPLATE = "Product with id %s not found";
 
-    public ProductListResponse getProducts(Integer page, Integer size, String keyword, Integer minPrice, Integer maxPrice) throws HttpStatusException {
-        PageRequest pageable = PageRequest.of(page - 1, size);
+    public ProductListResponse getProducts(Integer page, Integer size, String keyword, Integer minPrice, Integer maxPrice, String sortPriceStr) throws HttpStatusException {
+        Sort sortPrice;
+        if ("desc".equalsIgnoreCase(sortPriceStr)) {
+            sortPrice = Sort.by(Sort.Direction.DESC, Product.PRICE_COL);
+        } else {
+            sortPrice = Sort.by(Sort.Direction.ASC, Product.PRICE_COL);
+        }
+
+
+        PageRequest pageable = PageRequest.of(page - 1, size, sortPrice);
 
         Page<Product> productPage = productRepository.searchProducts(keyword,
                 Objects.nonNull(minPrice) ? BigDecimal.valueOf(minPrice) : null,
