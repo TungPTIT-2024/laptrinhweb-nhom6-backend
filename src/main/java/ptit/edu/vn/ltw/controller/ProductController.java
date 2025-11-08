@@ -24,10 +24,13 @@ public class ProductController {
 
     @GetMapping("/api/v1/products")
     public ResponseEntity<ProductListResponse> getProducts(@RequestParam(defaultValue = "1") Integer page,
-                                                           @RequestParam(defaultValue = "5") Integer size) {
+                                                           @RequestParam(defaultValue = "5") Integer size,
+                                                           @RequestParam(required = false) String keyword,
+                                                           @RequestParam(required = false) Integer minPrice,
+                                                           @RequestParam(required = false) Integer maxPrice) {
         if (page < 1) page = 1;
         if (size < 1) size = 5;
-        ProductListResponse response = productService.getProducts(page, size);
+        ProductListResponse response = productService.getProducts(page, size, keyword, minPrice, maxPrice);
         return ResponseEntity.ok(response);
     }
 

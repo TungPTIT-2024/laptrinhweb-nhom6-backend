@@ -16,6 +16,7 @@ import ptit.edu.vn.ltw.exception.ErrorDetail;
 import ptit.edu.vn.ltw.exception.HttpStatusException;
 import ptit.edu.vn.ltw.repository.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,10 +31,13 @@ public class ProductService {
     private static final String RESOURCES_NOT_FOUND = "Resources not found";
     private static final String ERROR_PRODUCT_NOT_FOUND_TEMPLATE = "Product with id %s not found";
 
-    public ProductListResponse getProducts(Integer page, Integer size) {
+    public ProductListResponse getProducts(Integer page, Integer size, String keyword, Integer minPrice, Integer maxPrice) throws HttpStatusException {
         PageRequest pageable = PageRequest.of(page - 1, size);
 
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.searchProducts(keyword,
+                Objects.nonNull(minPrice) ? BigDecimal.valueOf(minPrice) : null,
+                Objects.nonNull(maxPrice) ? BigDecimal.valueOf(maxPrice) : null,
+                pageable);
 
         List<ProductDetailResponse> productList = productPage.stream().map(product -> {
             ProductDetailResponse detailResponse = new ProductDetailResponse();
