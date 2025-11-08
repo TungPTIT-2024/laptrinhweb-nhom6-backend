@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import ptit.edu.vn.ltw.dto.checkout.CheckoutItemRequest;
 import ptit.edu.vn.ltw.dto.checkout.CheckoutRequest;
 import ptit.edu.vn.ltw.dto.common.GenericResponse;
-
+import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class CheckoutController {
     @PostMapping("/api/v1/checkout")
-    public ResponseEntity<GenericResponse> applyDiscount(@Valid @RequestBody CheckoutRequest request) {
+    public ResponseEntity<GenericResponse> applyDiscount( @Valid @RequestBody List<CheckoutItemRequest> request) {
         StringBuilder itemList = new StringBuilder();
-        for (CheckoutItemRequest item : request.getListItem()) {
+        for (CheckoutItemRequest item : request) {
             itemList.append("Item: ");
             itemList.append(item.getProductId()).append(", ");
         }
