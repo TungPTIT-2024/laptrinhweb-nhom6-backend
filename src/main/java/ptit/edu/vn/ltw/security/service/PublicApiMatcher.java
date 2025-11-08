@@ -51,6 +51,15 @@ public class PublicApiMatcher implements RequestMatcher {
                 return true;
             }
         }
+
+        PathPattern commentPattern = PARSER.parse("/api/v1/product/comments");
+
+        if ("GET".equalsIgnoreCase(request.getMethod()) &&
+                commentPattern.matches(pathContainer)) {
+            return true;
+        }
+
+
         return false;
     }
 
