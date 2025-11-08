@@ -37,7 +37,7 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/internal/api/v1/product")
+    @PostMapping("/internal/api/v1/products")
     public ResponseEntity<ProductDetailResponse> createProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductDetailResponse response = productService.createProduct(productRequest);
         return ResponseEntity.ok(response);
