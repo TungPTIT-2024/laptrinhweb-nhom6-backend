@@ -106,7 +106,7 @@ public class CommentService {
         }
 
         commentRepository.deleteById(commentId);
-        return new GenericResponse().setHttpStatus(200).setMessage("Comment updated successfully");
+        return new GenericResponse().setHttpStatus(200).setMessage("Comment deleted successfully");
 
     }
 }
