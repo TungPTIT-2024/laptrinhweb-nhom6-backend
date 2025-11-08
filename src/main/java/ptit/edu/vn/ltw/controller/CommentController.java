@@ -33,21 +33,21 @@ public class CommentController {
     }
 
     @PostMapping("/api/v1/product/comments")
-    public ResponseEntity<CommentResponse> postProductComment(@RequestParam(value = "id") String productId,
+    public ResponseEntity<CommentResponse> postProductComment(@RequestParam(value = "productId") String productId,
                                                               @Valid @RequestBody CommentRequest request) {
         CommentResponse response = commentService.createCommentForProduct(productId, request);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/api/v1/product/comments")
-    public ResponseEntity<CommentResponse> editComment(@RequestParam(value = "id") String commentId,
+    public ResponseEntity<CommentResponse> editComment(@RequestParam(value = "commentId") String commentId,
                                                        @Valid @RequestBody CommentRequest request) {
         CommentResponse response = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/api/v1/product/comments")
-    public ResponseEntity<GenericResponse> deleteComment(@RequestParam(value = "id") String commentId) {
+    public ResponseEntity<GenericResponse> deleteComment(@RequestParam(value = "commentId") String commentId) {
         GenericResponse response = commentService.deleteComment(commentId);
         return ResponseEntity.ok(response);
     }
