@@ -1,5 +1,6 @@
 package ptit.edu.vn.ltw.security.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ptit.edu.vn.ltw.security.service.InternalApiMatcher;
 import ptit.edu.vn.ltw.security.service.PublicApiMatcher;
 import ptit.edu.vn.ltw.security.service.UserManager;
+
+import java.util.List;
 
 @Configuration
 public class SecurityBean {
@@ -40,13 +43,14 @@ public class SecurityBean {
         return reg;
     }
 
-    @Bean
-    @Primary
-    public CorsConfigurationSource configurationSource(){
+    @Bean("corsAllOrigin")
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
+        configuration.addAllowedOriginPattern("*"); // chấp nhận tất cả origin, nhưng vẫn xét header Authorization
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -54,10 +58,11 @@ public class SecurityBean {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain publicSecurityChain(HttpSecurity http, PublicApiMatcher publicApiMatcher) throws Exception {
+    public SecurityFilterChain publicSecurityChain(HttpSecurity http, PublicApiMatcher publicApiMatcher,
+                                                   @Qualifier("corsAllOrigin") CorsConfigurationSource source) throws Exception {
 
         http.securityMatcher(publicApiMatcher)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(source))
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -68,10 +73,11 @@ public class SecurityBean {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain internalSecurityChain(HttpSecurity http, InternalApiMatcher internalApiMatcher, InternalFilter internalFilter) throws Exception {
+    public SecurityFilterChain internalSecurityChain(HttpSecurity http, InternalApiMatcher internalApiMatcher, InternalFilter internalFilter,
+                                                     @Qualifier("corsAllOrigin") CorsConfigurationSource source) throws Exception {
 
         http.securityMatcher(internalApiMatcher)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(source))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -85,9 +91,10 @@ public class SecurityBean {
     @Order(3)
     public SecurityFilterChain apiSecurityChain(HttpSecurity http,
                                                 UserManager userManager,
-                                                UserFilter userFilter) throws Exception {
+                                                UserFilter userFilter,
+                                                @Qualifier("corsAllOrigin") CorsConfigurationSource source) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(source))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().authenticated()
