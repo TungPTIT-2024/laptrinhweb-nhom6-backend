@@ -20,7 +20,7 @@ public class PublicApiMatcher implements RequestMatcher {
             "/api/v1/register/**",
             "/h2-console/**",
             "/health", "/favicon.ico", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html",
-            "/webjars/**", "/swagger-resources/**", "/swagger-resources"
+            "/webjars/**", "/swagger-resources/**", "/swagger-resources", "/error/**"
     );
 
     private List<PathPattern> publicPatterns;
