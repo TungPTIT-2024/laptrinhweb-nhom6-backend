@@ -53,13 +53,13 @@ public class CommentService {
         return response;
     }
 
-    public CommentResponse createCommentForProduct(String productId, @Valid CommentRequest request) {
+    public CommentResponse createCommentForProduct( @Valid CommentRequest request) {
         String userId = ContextUtility.getUserId();
-        productService.checkProductExistById(productId);
+        productService.checkProductExistById(request.getProductId());
 
         Comment comment = new Comment();
         comment.setUserId(userId);
-        comment.setProductId(productId);
+        comment.setProductId(request.getProductId());
         comment.setContent(request.getContent());
 
         commentRepository.save(comment);
@@ -70,11 +70,11 @@ public class CommentService {
         return commentResponse;
     }
 
-    public CommentResponse updateComment(String commentId, @Valid CommentRequest request) {
+    public CommentResponse updateComment( @Valid CommentRequest request) {
         String userId = ContextUtility.getUserId();
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
-            ErrorDetail errorDetail = new ErrorDetail().setField("comment_id").setIssue(String.format("Comment with id %s not found", commentId));
+        Comment comment = commentRepository.findById(request.getCommentId()).orElseThrow(() -> {
+            ErrorDetail errorDetail = new ErrorDetail().setField("comment_id").setIssue(String.format("Comment with id %s not found", request.getCommentId()));
             return HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
         });
 
