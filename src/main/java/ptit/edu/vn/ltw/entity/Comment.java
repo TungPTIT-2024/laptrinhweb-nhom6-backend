@@ -28,7 +28,7 @@ public class Comment extends Auditable {
     @Id
     @UuidGenerator
     @Column(name = ID_COL, nullable = false, updatable = false, length = 36)
-    private String id;
+    private String commentId;
 
     @Column(name = PRODUCT_ID_COL, length = 36)
     private String productId;

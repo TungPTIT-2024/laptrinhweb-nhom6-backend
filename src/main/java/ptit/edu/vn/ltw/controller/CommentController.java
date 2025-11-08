@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ptit.edu.vn.ltw.dto.comment.CommentListResponse;
 import ptit.edu.vn.ltw.dto.comment.CommentRequest;
+import ptit.edu.vn.ltw.dto.comment.CommentResponse;
 import ptit.edu.vn.ltw.dto.common.GenericResponse;
 import ptit.edu.vn.ltw.service.CommentService;
 
@@ -32,16 +33,16 @@ public class CommentController {
     }
 
     @PostMapping("/api/v1/product/comment")
-    public ResponseEntity<GenericResponse> postProductComment(@RequestParam(value = "id") String productId,
+    public ResponseEntity<CommentResponse> postProductComment(@RequestParam(value = "id") String productId,
                                                               @Valid @RequestBody CommentRequest request) {
-        GenericResponse response = commentService.createCommentForProduct(productId, request);
+        CommentResponse response = commentService.createCommentForProduct(productId, request);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/api/v1/comment")
-    public ResponseEntity<GenericResponse> editComment(@RequestParam(value = "id") String commentId,
+    public ResponseEntity<CommentResponse> editComment(@RequestParam(value = "id") String commentId,
                                                        @Valid @RequestBody CommentRequest request) {
-        GenericResponse response = commentService.updateComment(commentId, request);
+        CommentResponse response = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(response);
     }
 

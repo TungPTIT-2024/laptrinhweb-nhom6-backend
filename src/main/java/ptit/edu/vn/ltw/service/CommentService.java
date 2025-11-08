@@ -53,7 +53,7 @@ public class CommentService {
         return response;
     }
 
-    public GenericResponse createCommentForProduct(String productId, @Valid CommentRequest request) {
+    public CommentResponse createCommentForProduct(String productId, @Valid CommentRequest request) {
         String userId = ContextUtility.getUserId();
         productService.checkProductExistById(productId);
 
@@ -64,10 +64,13 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new GenericResponse().setHttpStatus(200).setMessage("Comment created successfully");
+        CommentResponse commentResponse = new CommentResponse();
+        BeanUtils.copyProperties(comment, commentResponse);
+
+        return commentResponse;
     }
 
-    public GenericResponse updateComment(String commentId, @Valid CommentRequest request) {
+    public CommentResponse updateComment(String commentId, @Valid CommentRequest request) {
         String userId = ContextUtility.getUserId();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
@@ -83,7 +86,10 @@ public class CommentService {
         comment.setContent(request.getContent());
         commentRepository.save(comment);
 
-        return new GenericResponse().setHttpStatus(200).setMessage("Comment updated successfully");
+        CommentResponse commentResponse = new CommentResponse();
+        BeanUtils.copyProperties(comment, commentResponse);
+
+        return commentResponse;
     }
 
     public GenericResponse deleteComment(String commentId) {

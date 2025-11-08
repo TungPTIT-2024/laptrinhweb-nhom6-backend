@@ -17,6 +17,7 @@ import static ptit.edu.vn.ltw.utility.TimeUtility.ZONE_GMT7;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Accessors(chain=true)
 public class CommentResponse {
+    private String commentId;
     private String userId;
     private String userName;
     private String profileImage;
