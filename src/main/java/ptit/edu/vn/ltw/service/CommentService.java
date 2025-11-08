@@ -75,7 +75,7 @@ public class CommentService {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             ErrorDetail errorDetail = new ErrorDetail().setField("comment_id").setIssue(String.format("Comment with id %s not found", commentId));
-            throw HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
+            return HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
         });
 
         if (!comment.getUserId().equals(userId)) {
@@ -97,7 +97,7 @@ public class CommentService {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> {
             ErrorDetail errorDetail = new ErrorDetail().setField("comment_id").setIssue(String.format("Comment with id %s not found", commentId));
-            throw HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
+            return HttpStatusException.badRequest("Resources not found", List.of(errorDetail));
         });
 
         if (!comment.getUserId().equals(userId)) {
